@@ -1,0 +1,28 @@
+.emailtitle{
+    font-size:17px;
+}
+#container{
+    height: 100vh;
+}
+.emailverificationicon{
+    padding:18px 0px;
+    width: 70px;
+}
+#useremail{
+    color: #3360f8;
+}
+.butttonsdiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.butttonsdiv > button{
+    background-color: #3360f8;
+    border: none;
+    color: white;
+    width: 45%;
+    border-radius: 10px;
+    padding:8px 15px;
+}

@@ -1,0 +1,10 @@
+.forgetpasswordbtn, .forgetpasswordbtn > a{
+    text-align: end;
+    margin-top: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+ }
+ #container{
+    height: 100vh;
+ }

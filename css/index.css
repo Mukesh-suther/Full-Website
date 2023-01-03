@@ -1,0 +1,43 @@
+.createpost{
+    background-color: white;
+    padding: 5px;
+}
+.userprofile > img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+
+}
+#createpostdiv{
+    background-color: #e7ebfe;
+    width: 100%;
+    padding: 11px 12px;
+    outline: none;
+    border: none;
+    font-size: 13px;
+    border-radius: 20px;
+}
+.nav > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loaderdiv{
+    width: 100%;
+    height: 119px;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
+    justify-content: center;
+    align-items: center;
+}
+#messagediv{
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: 600;
+    width: 100%;
+    display: none;
+}
