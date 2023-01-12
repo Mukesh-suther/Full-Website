@@ -16,8 +16,8 @@
     margin-bottom: 5px;
 }
 .userimg > img{
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
 }
 #data{
@@ -33,9 +33,7 @@
     font-size: 11px;
     margin-bottom: 0px;
 }
-#usercoverpicture{
-    height: 200px;
-}
+
 .dropdown{
     width: 10%;
     height: 100%;
@@ -49,14 +47,12 @@
     display: none;
 }
 #loader{
-    height: 160px;
-    margin: 0px 110px;
+    width: 200px;
 }
 #userpicturesdetails{
     position: relative;
     background-color: white;
     border: 2px solid #dfdfdf;
-    height: 282px;
     display: none;
     flex-direction: column;
     align-items: flex-start;
@@ -66,9 +62,16 @@
 }
 #userprofilepicture{
     border-radius: 50%;
-    height: 116px;
-    width: 116px;
     position: absolute;
-    top: 133px;
+    bottom: 25px;
     left: 15px;
+}
+#usercoverpicture{
+    margin-bottom: 8%;
+    max-height: 200px;
+}
+@media only screen and (max-width: 560px) {
+    #loader{
+        width: 50%;
+    }
 }

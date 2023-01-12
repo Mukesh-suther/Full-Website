@@ -43,8 +43,8 @@
                 <li class="logouticon col-2"><a href="./pages/Logout.html"><i class="fa-solid fa-right-from-bracket icons"></i></a></li>
             </div>
             <div class="nav col-12">
-                <div style="width: 10%;"><div class="userprofile" ><img src="./assessts/icons/user.png" alt="" id="usercommentimage"></div></div>
-                <div style="width: 88%; margin-left: 7px;">
+                <div class="col-2"><div class="userprofile" ><img src="./assessts/icons/user.png" alt="" id="usercommentimage" class="profilepicture"></div></div>
+                <div style="padding: 0px;" class="col-10">
                     <input id="createpostdiv"></input>
                 </div>
             </div>
@@ -52,13 +52,9 @@
             <div class="col-12" id="postsdiv">
                 <!-- Loader -->
                 <div id="loaderdiv">
-                    <img src="./assessts/gifs/loader.gif" alt="" style="width: 161px;">
+                    <img src="./assessts/gifs/loader.gif" style="width: 161px;">
                 </div>
-                <!-- Message -->
-                <div id="messagediv">
-                    <h1 style="font-weight: 600;">Data Not avilable</h1>
-                </div>
-
+                <div id="postsshow"></div>
             </div>
         </div>
         </div>

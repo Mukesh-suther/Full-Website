@@ -5,9 +5,10 @@ firebase.auth().onAuthStateChanged((user) => {
         .firestore()
         .collection("users")
         .onSnapshot((users) => {
-          document.getElementById("loader").style.display = "none";
+          document.getElementById("loaderdiv").style.display = "none";
           users.forEach((usersdetail) => {
             var Name = usersdetail.data().Firstname + " " + usersdetail.data().Lastname;
+
             var user = document.getElementById("users");
             var userdetails = document.createElement("div");
             user.appendChild(userdetails);
@@ -15,8 +16,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
             var userimgdiv = document.createElement("div");
             userdetails.appendChild(userimgdiv);
-            userimgdiv.setAttribute("class", "userimg");
-            userimgdiv.style.width = "10%";
+            userimgdiv.setAttribute("class", "userimg col-2");
 
             var userimg = document.createElement("img");
             userimgdiv.appendChild(userimg);
@@ -24,6 +24,9 @@ firebase.auth().onAuthStateChanged((user) => {
             if(usersdetail.data().ProfilePicture !== ""){
               userimg.setAttribute("src" , usersdetail.data().ProfilePicture)
             }
+            userimg.setAttribute("class" , "profilepicture")
+            
+
 
             var userdata = document.createElement("div");
             userdetails.appendChild(userdata);
@@ -74,6 +77,7 @@ firebase.auth().onAuthStateChanged((user) => {
             if(usersdetail.data().ProfilePicture !== ""){
               userprofilepicture.setAttribute("src" , usersdetail.data().ProfilePicture)
             }
+            userprofilepicture.setAttribute("class", "largeprofilepicture")
 
             var usernameondetails = document.createElement("p");
             userprofilesdiv.appendChild(usernameondetails);

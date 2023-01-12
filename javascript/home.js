@@ -1,5 +1,6 @@
 let userprofilesrc = "";
 let alluser = [];
+let postsshow = document.getElementById("postsdiv");
 let createpostinput = document.getElementById("createpostdiv");
 let currentuserprofile = document.getElementById("usercommentimage");
 firebase.auth().onAuthStateChanged((user) => {
@@ -10,7 +11,7 @@ firebase.auth().onAuthStateChanged((user) => {
         .collection("users/")
         .onSnapshot((doc) => {
           doc.forEach((users) => {
-            alluser.push(users.data())
+            alluser.push(users.data());
             Filetype = users.data().FileType;
             if (users.data().uid === user.uid) {
               createpostinput.setAttribute(
@@ -28,24 +29,36 @@ firebase.auth().onAuthStateChanged((user) => {
             }
           });
         });
-        console.log(alluser)
       //Posts
       firebase
         .firestore()
         .collection("posts/")
         .onSnapshot((doc) => {
-          document.getElementById("loaderdiv").style.display = "none";
+          postsshow.innerHTML = "";
           var allposts = [];
-          if (doc.size === 0) {
-            document.getElementById("messagediv").style.display = "block";
-          } else {
+          if(doc.size === 0){
+            var messagediv = document.createElement("div");
+            postsshow.appendChild(messagediv);
+            messagediv.setAttribute("class", "messagediv")
+            messagediv.style.fontWeight = "600"
+            messagediv.style.display  = "block"
+
+            var messagetext = document.createTextNode("Data Not avilable");
+            messagediv.appendChild(messagetext);
+          }
+          else {
             doc.forEach((posts) => {
               allposts.push(posts.data());
             });
-            for (let i = 0; i < allposts.length; i++) {
+            for (let postindex = 0; postindex < allposts.length; postindex++) {
+              let likeary = allposts[postindex].Likes;
+              let dislikeary = allposts[postindex].Dislikes;
+              let commentary = allposts[postindex].Comments;
+
               var post = document.createElement("div");
-              postsdiv.appendChild(post);
+              postsshow.appendChild(post);
               post.setAttribute("class", "post col-12");
+              post.setAttribute("id", postindex);
 
               var postheader = document.createElement("div");
               post.appendChild(postheader);
@@ -58,11 +71,11 @@ firebase.auth().onAuthStateChanged((user) => {
               var userprofile = document.createElement("img");
               userprofilediv.appendChild(userprofile);
               userprofile.setAttribute("src", "./assessts/icons/user.png");
-              userprofile.setAttribute("class", "postuserprofile");
+              userprofile.setAttribute("class", "profilepicture");
               for (let b = 0; b < alluser.length; b++) {
-                if(alluser[b].uid === allposts[i].uid){
-                  if(alluser[b].ProfilePicture !== ""){
-                  userprofile.setAttribute("src" , alluser[b].ProfilePicture)
+                if (alluser[b].uid === allposts[postindex].uid) {
+                  if (alluser[b].ProfilePicture !== "") {
+                    userprofile.setAttribute("src", alluser[b].ProfilePicture);
                   }
                 }
               }
@@ -77,30 +90,31 @@ firebase.auth().onAuthStateChanged((user) => {
               usernameanddetailsdiv.appendChild(username);
               username.setAttribute("class", "username");
               for (let b = 0; b < alluser.length; b++) {
-                if(alluser[b].uid === allposts[i].uid){
-                  username.innerHTML = alluser[b].Firstname + " " + alluser[b].Lastname;
+                if (alluser[b].uid === allposts[postindex].uid) {
+                  username.innerHTML =
+                    alluser[b].Firstname + " " + alluser[b].Lastname;
                 }
               }
               var postdate = document.createElement("p");
               usernameanddetailsdiv.appendChild(postdate);
               postdate.setAttribute("class", "postdate");
-              postdate.innerHTML = "10-12-2022";
-              if (allposts[i].Post !== "") {
+              postdate.innerHTML = allposts[postindex].PostDate;
+              if (allposts[postindex].Post !== "") {
                 var posttext = document.createElement("p");
                 post.appendChild(posttext);
                 posttext.setAttribute("class", "posttext col-12");
-                posttext.innerHTML = allposts[i].Post;
-              } else if (allposts[i].FileSrc !== "") {
+                posttext.innerHTML = allposts[postindex].Post;
+              } else if (allposts[postindex].FileSrc !== "") {
                 if (
-                  allposts[i].FileType === "image/png" ||
-                  allposts[i].FileType === "image/jpeg" ||
-                  allposts[i].FileType === "image/jpg" ||
-                  allposts[i].FileType === "image/webp"
+                  allposts[postindex].FileType === "image/png" ||
+                  allposts[postindex].FileType === "image/jpeg" ||
+                  allposts[postindex].FileType === "image/jpg" ||
+                  allposts[postindex].FileType === "image/webp"
                 ) {
                   var postimage = document.createElement("img");
                   post.appendChild(postimage);
                   postimage.setAttribute("class", "posttext col-12");
-                  postimage.setAttribute("src", allposts[i].FileSrc);
+                  postimage.setAttribute("src", allposts[postindex].FileSrc);
                 } else {
                   let postvideo = document.createElement("video");
                   post.appendChild(postvideo);
@@ -108,59 +122,70 @@ firebase.auth().onAuthStateChanged((user) => {
                   postvideo.setAttribute("class", "postVideo");
                   let source = document.createElement("source");
                   postvideo.appendChild(source);
-                  source.setAttribute("src", allposts[i].FileSrc);
-                  source.setAttribute("type", "video");
-                  source.style.width = "100%";
+                  source.setAttribute("src", allposts[postindex].FileSrc);
                 }
               }
-              var impressionsdiv = document.createElement("div");
-              post.appendChild(impressionsdiv);
-              impressionsdiv.setAttribute("class", "col-12 impressionsdiv");
-
+              var footer = document.createElement("div");
+              post.appendChild(footer);
+              footer.setAttribute("class", "col-12 impressionsdiv");
               //like
-              var likediv = document.createElement("div");
-              impressionsdiv.appendChild(likediv);
-              likediv.setAttribute("class", "likediv");
+              var likebutton = document.createElement("button");
+              footer.appendChild(likebutton);
+              likebutton.setAttribute("class", "likebutton");
 
               var likeicons = document.createElement("i");
-              likediv.appendChild(likeicons);
+              likebutton.appendChild(likeicons);
               likeicons.setAttribute("class", "fa-regular fa-thumbs-up");
 
               var liketitle = document.createElement("p");
-              likediv.appendChild(liketitle);
+              likebutton.appendChild(liketitle);
               liketitle.setAttribute("class", "impressionstitle");
-              liketitle.innerHTML = "Like (0)";
+              liketitle.innerHTML = `Like (${likeary.length})`;
+              for (let likeIndex = 0; likeIndex < likeary.length; likeIndex++) {
+                if (likeary[likeIndex] === user.uid) {
+                  likeicons.style.color = "blue";
+                  liketitle.style.color = "blue";
+                }
+              }
 
               //disklike
               var disklikediv = document.createElement("div");
-              impressionsdiv.appendChild(disklikediv);
+              footer.appendChild(disklikediv);
               disklikediv.setAttribute("class", "disklikediv");
 
-              var dislikelikeicon = document.createElement("i");
-              disklikediv.appendChild(dislikelikeicon);
-              dislikelikeicon.setAttribute(
-                "class",
-                "fa-regular fa-thumbs-down"
-              );
+              var dislikeicon = document.createElement("i");
+              disklikediv.appendChild(dislikeicon);
+              dislikeicon.setAttribute("class", "fa-regular fa-thumbs-down");
 
               var diskliketitle = document.createElement("p");
               disklikediv.appendChild(diskliketitle);
               diskliketitle.setAttribute("class", "impressionstitle");
-              diskliketitle.innerHTML = "Dislike (0)";
+              diskliketitle.innerHTML = `Dislike (${dislikeary.length})`;
+              for (
+                let dislikeindex = 0;
+                dislikeindex < dislikeary.length;
+                dislikeindex++
+              ) {
+                if (dislikeary[dislikeindex] === user.uid) {
+                  dislikeicon.style.color = "blue";
+                  diskliketitle.style.color = "blue";
+                }
+              }
 
               //comment
               var commentdiv = document.createElement("div");
-              impressionsdiv.appendChild(commentdiv);
+              footer.appendChild(commentdiv);
               commentdiv.setAttribute("class", "commentdiv");
+              commentdiv.setAttribute("id" , postindex)
 
-              var commenticon = document.createElement("i");
+              var commenticon = document.createElement("postindex");
               commentdiv.appendChild(commenticon);
               commenticon.setAttribute("class", "fa-regular fa-message");
 
               var commenttitle = document.createElement("p");
               commentdiv.appendChild(commenttitle);
               commenttitle.setAttribute("class", "impressionstitle");
-              commenttitle.innerHTML = "Comment (0)";
+              commenttitle.innerHTML = `Comment (${commentary.length})`;
 
               var currentusercommentdiv = document.createElement("div");
               post.appendChild(currentusercommentdiv);
@@ -179,16 +204,14 @@ firebase.auth().onAuthStateChanged((user) => {
                 "class",
                 "currentusercommentinput"
               );
-
-              var currentusercommentsendbutton =
-                document.createElement("button");
+              currentusercommentinput.setAttribute("id" , `commentdata${postindex}`)
+              var currentusercommentsendbutton = document.createElement("button");
               currentusercommentdiv.appendChild(currentusercommentsendbutton);
-              currentusercommentsendbutton.setAttribute(
-                "class",
-                "currentusercommentsendbutton"
-              );
+              currentusercommentsendbutton.setAttribute("class","currentusercommentsendbutton");
+              currentusercommentsendbutton.setAttribute("id", postindex)
 
-              var currentusercommentsendbuttonimg = document.createElement("i");
+              var currentusercommentsendbuttonimg =
+                document.createElement("postindex");
               currentusercommentsendbutton.appendChild(
                 currentusercommentsendbuttonimg
               );
@@ -196,6 +219,72 @@ firebase.auth().onAuthStateChanged((user) => {
                 "class",
                 "fa-solid fa-paper-plane sendemailbutton"
               );
+              //like function
+              likebutton.addEventListener("click", () => {
+                let like = false;
+                for (
+                  let likeIndex = 0;
+                  likeIndex < likeary.length;
+                  likeIndex++
+                ) {
+                  if (likeary[likeIndex] === user.uid) {
+                    like = true;
+                    likeary.splice(likeIndex, 1);
+                  }
+                }
+                if (!like) {
+                  likeary.push(user.uid);
+                }
+                firebase
+                  .firestore()
+                  .collection("posts/")
+                  .doc(allposts[postindex].id)
+                  .update({
+                    Likes: likeary,
+                  });
+              });
+
+              //Dislike
+              disklikediv.addEventListener("click", () => {
+                let dislike = false;
+                for (
+                  let dislikeIndex = 0;
+                  dislikeIndex < dislikeary.length;
+                  dislikeIndex++
+                ) {
+                  if (dislikeary[dislikeIndex] === user.uid) {
+                    dislike = true;
+                    dislikeary.splice(dislikeIndex, 1);
+                  }
+                }
+                if (!dislike) {
+                  dislikeary.push(user.uid);
+                }
+                firebase
+                  .firestore()
+                  .collection("posts/")
+                  .doc(allposts[postindex].id)
+                  .update({
+                    Dislikes: dislikeary,
+                  });
+              });
+              //comment
+              currentusercommentsendbutton.addEventListener("click" , ()=>{
+                let targetcommentdata = document.getElementById(`commentdata${postindex}`)
+                if(targetcommentdata.value === ""){
+                  alert("Please write something.....!")
+                }else{
+                  let Comment = {
+                    comment : targetcommentdata.value,
+                    uid : user.uid
+                  }
+                  commentary.push(Comment)
+                  //update comment in firebase
+                  firebase.firestore().collection("posts/").doc(allposts[postindex].id).update({
+                    Comments : commentary
+                  })
+                }
+              })
             }
           }
         });
